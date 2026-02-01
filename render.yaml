@@ -1,21 +1,25 @@
 services:
   - type: web
     name: openclaw
-    runtime: docker
-    plan: starter
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start -- gateway --allow-unconfigured
     healthCheckPath: /health
     envVars:
+      - key: DEV_MODE
+        value: "true"
+      - key: NODE_ENV
+        value: production
       - key: PORT
-        value: "8080"
-      - key: SETUP_PASSWORD
+        value: "10000"
+      - key: AGENTS_PROVIDER
+        value: openai
+      - key: AGENTS_MODEL
+        value: google/gemini-2.0-flash-001
+      - key: AGENTS_API_BASE
+        value: https://openrouter.ai/api/v1
+      - key: AGENTS_API_KEY
         sync: false
-      - key: OPENCLAW_STATE_DIR
-        value: /data/.openclaw
-      - key: OPENCLAW_WORKSPACE_DIR
-        value: /data/workspace
       - key: OPENCLAW_GATEWAY_TOKEN
-        generateValue: true
-    disk:
-      name: openclaw-data
-      mountPath: /data
-      sizeGB: 1
+        sync: false
